@@ -1,7 +1,5 @@
-package java.main;
+package main.project;
 
-import java.main.HeuristicComparator;
-import java.main.Individual;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

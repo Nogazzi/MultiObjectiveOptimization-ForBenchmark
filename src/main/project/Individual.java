@@ -1,4 +1,4 @@
-package java.main;
+package main.project;
 
 import java.util.List;
 import java.util.Random;
@@ -12,15 +12,17 @@ public class Individual implements Comparable<Individual> {
 
     private final int size;
     private final double[] characteristics;
-    private int dominanceDepth;
+    private double[] criteriaValues;
+    private int dominanceDepth = 0;
     private int dominanceRank = 1;
-    private int dominanceCount;
+    private int dominanceCount = 0;
     private Set<Individual> dominators = new TreeSet<>();
     private Set<Individual> dominated = new TreeSet<>();
 
     public Individual(final int size) {
         this.size = size;
         this.characteristics = new double[size];
+        this.criteriaValues = new double[size];
         for (int i = 0; i < size; ++i) {
             double newDouble = new Random().nextDouble();
 
@@ -40,6 +42,17 @@ public class Individual implements Comparable<Individual> {
         this.characteristics[1] = x2;
     }
 
+    public Individual(final int size, final double[] characteristics) {
+        this.size = size;
+        this.characteristics = characteristics;
+    }
+
+    public Individual(final int size, final double[] characteristics, final int criteriasAmount){
+        this.size = size;
+        this.characteristics = characteristics;
+        this.criteriaValues = new double[criteriasAmount];
+    }
+
     public void setDominanceDepth(int dominanceDepth) {
         this.dominanceDepth = dominanceDepth;
     }
@@ -52,27 +65,31 @@ public class Individual implements Comparable<Individual> {
         this.dominanceCount = dominanceCount;
     }
 
+    public void setCriteriaValues(int index, double value){
+        this.criteriaValues[index] = value;
+    }
+
     public int getDominanceDepth() {
         return dominanceDepth;
     }
 
     public int getDominanceRank() {
-        return this.dominators.size()+1;
+        return this.dominators.size() + 1;
     }
 
     public int getDominanceCount() {
-        return this.dominated.size()+1;
+        return this.dominated.size();
     }
 
-    public void increaseDominanceRank(){
+    public void increaseDominanceRank() {
         this.dominanceRank++;
     }
 
-    public void addDominator(Individual dominator){
+    public void addDominator(Individual dominator) {
         this.dominators.add(dominator);
     }
 
-    public void addDominated(Individual dominated){
+    public void addDominated(Individual dominated) {
         this.dominated.add(dominated);
     }
 
@@ -84,19 +101,23 @@ public class Individual implements Comparable<Individual> {
         return this.characteristics[index];
     }
 
+    public double[] getCharacteristics(){
+        return this.characteristics;
+    }
+
     public boolean dominates(Individual o1) {
         if (o1.getSize() != getSize()) {
 
         }
         boolean dominates = false;
         for (int i = 0; i < o1.getSize(); ++i) {
-            if (this.getCharacteristic(i) < o1.getCharacteristic(i)) {
+            if (this.getCharacteristic(i) > o1.getCharacteristic(i)) {
                 return false;
-            } else if (this.getCharacteristic(i) > o1.getCharacteristic(i)) {
+            } else if (this.getCharacteristic(i) < o1.getCharacteristic(i)) {
                 dominates = true;
             }
         }
-        if(dominates){
+        if (dominates) {
             o1.addDominator(this);
             this.addDominated(o1);
         }

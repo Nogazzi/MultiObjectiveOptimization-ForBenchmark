@@ -1,6 +1,5 @@
-package java.main;
+package main.project;
 
-import java.main.Individual;
 import java.util.List;
 
 /**

@@ -1,7 +1,8 @@
-package java.main.comparators;
+package main.project.comparators;
 
 
-import java.main.Individual;
+import main.project.Individual;
+
 import java.util.Comparator;
 
 /**

@@ -1,7 +1,8 @@
-package java.main.comparators;
+package main.project.comparators;
 
 
-import java.main.Individual;
+import main.project.Individual;
+
 import java.util.Comparator;
 
 /**
@@ -10,6 +11,6 @@ import java.util.Comparator;
 public class DominanceDepthComparator implements Comparator<Individual> {
     @Override
     public int compare(Individual o1, Individual o2) {
-        return o2.getDominanceDepth()-o1.getDominanceDepth();
+        return o1.getDominanceDepth()-o2.getDominanceDepth();
     }
 }
