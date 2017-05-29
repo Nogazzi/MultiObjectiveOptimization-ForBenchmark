@@ -25,6 +25,8 @@ public class MopTwoImpl extends MopImpl {
             sum2 += Math.pow(characteristics[i] + 1/Math.sqrt(characteristics.length),2);
         }
         evalue2 = 1 - Math.exp(-sum2);
+        individual.setCriteriaValues(0, evalue1);
+        individual.setCriteriaValues(1, evalue2);
         this.terminationCondition--;
     }
 

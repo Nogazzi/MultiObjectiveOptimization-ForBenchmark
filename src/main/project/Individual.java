@@ -18,6 +18,7 @@ public class Individual implements Comparable<Individual> {
     private int dominanceCount = 0;
     private Set<Individual> dominators = new TreeSet<>();
     private Set<Individual> dominated = new TreeSet<>();
+    private int crowdDistance = 0;
 
     public Individual(final int size) {
         this.size = size;
@@ -65,8 +66,16 @@ public class Individual implements Comparable<Individual> {
         this.dominanceCount = dominanceCount;
     }
 
+    public void setCrowdDistance(int distance){
+        this.crowdDistance = distance;
+    }
+
     public void setCriteriaValues(int index, double value){
         this.criteriaValues[index] = value;
+    }
+
+    public int getCrowdDistance(){
+        return this.crowdDistance;
     }
 
     public int getDominanceDepth() {

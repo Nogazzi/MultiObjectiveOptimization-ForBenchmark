@@ -3,6 +3,9 @@ package main.project.tasks;
 import main.project.HeuristicComparator;
 import main.project.Individual;
 import main.project.KungComparator;
+import main.project.comparators.F1CrowdingSort;
+import main.project.comparators.F2CrowdingSort;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -27,6 +30,20 @@ public abstract class MopImpl implements Mop {
         HeuristicComparator kung = new KungComparator();
 
         initialPopulation = generateDominanceDepthLayersByKung(initialPopulation);
+
+        List<Individual> childrenPopulation;
+        List<Individual> parentsPopulation;
+        List<Individual> combinedPopulation;
+        while (terminationCondition > 0) {
+            // 6)
+            combinedPopulation.addAll(childrenPopulation);
+            combinedPopulation.addAll(parentsPopulation);
+            // 7)
+            parentsPopulation = new ArrayList<>();
+            // 8)
+            identifyFronts(combinedPopulation);
+
+        }
     }
 
     @Override
@@ -59,5 +76,34 @@ public abstract class MopImpl implements Mop {
         List<Individual> kungIdentifiedSet = kungComparator.identifyDominatedSet(individuals);
         kungIdentifiedSet = kungIdentifiedSet.stream().distinct().collect(Collectors.toList());
         return kungIdentifiedSet;
+    }
+
+    @Override
+    public List<Individual> crowdingSort(List<Individual> individuals) {
+        individuals.stream().forEach(individual -> individual.setCrowdDistance(0));
+        List<Individual> l1 = new ArrayList<>(individuals);
+        List<Individual> l2 = new ArrayList<>(individuals);
+
+        l1.sort(new F1CrowdingSort());
+        l2.sort(new F2CrowdingSort());
+
+        for(int i = 0 ; i < l1.size() ; ++i) {
+
+        }
+    }
+
+    @Override
+    public void identifyFronts(List<Individual> individuals) {
+        individuals = individuals.stream().distinct().collect(Collectors.toList());
+        Collections.sort(individuals);
+        HeuristicComparator kungComparator = new KungComparator();
+
+        List<Individual> kungIdentifiedSet = kungComparator.identifyDominatedSet(individuals);
+        kungIdentifiedSet = kungIdentifiedSet.stream().distinct().collect(Collectors.toList());
+    }
+
+    @Override
+    public void calculateCrowdDistance(List<Individual> individuals) {
+
     }
 }

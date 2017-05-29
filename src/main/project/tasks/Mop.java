@@ -2,6 +2,8 @@ package main.project.tasks;
 
 import main.project.Individual;
 
+import java.util.List;
+
 /**
  * Created by Nogaz on 28.05.2017.
  */
@@ -10,4 +12,7 @@ public interface Mop {
     public Individual generateIndividual();
     public void doSimulation();
     public void generatePopulation();
+    public List<Individual> crowdingSort(List<Individual> individuals);
+    public void identifyFronts(List<Individual> individuals);
+    public void calculateCrowdDistance(List<Individual> individuals);
 }
