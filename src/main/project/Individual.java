@@ -155,11 +155,18 @@ public class Individual implements Comparable<Individual> {
 
     @Override
     public int compareTo(Individual o) {
-        int dif = Double.compare(o.getCoordinate(0), getCoordinate(0));
+        for( int i = 0 ; i < this.coordinates.length ; ++i ){
+            int dif = Double.compare(o.getCoordinate(i), getCoordinate(i));
+            if (dif != 0) {
+                return dif;
+            }
+        }
+        return 0;
+        /*int dif = Double.compare(o.getCoordinate(0), getCoordinate(0));
         if (dif == 0) {
             return Double.compare(o.getCoordinate(1), getCoordinate(1));
         }
-        return dif;
+        return dif;*/
     }
 
     @Override

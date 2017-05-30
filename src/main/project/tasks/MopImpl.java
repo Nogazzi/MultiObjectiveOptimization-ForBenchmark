@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
  */
 public abstract class MopImpl implements Mop {
 
-    protected int terminationCondition = 100000000;
+    protected int terminationCondition = 6;
 
     private int initialPopulationSize = 30;
     private List<Individual> initialPopulation;
@@ -29,8 +29,7 @@ public abstract class MopImpl implements Mop {
 
     @Override
     public void doSimulation() {
-        initialPopulation = new ArrayList<>();
-        generatePopulation();
+        initialPopulation = generatePopulation();
         initialPopulation.stream().forEach(individual -> evaluate(individual));
 
         HeuristicComparator kung = new KungComparator();
@@ -39,7 +38,7 @@ public abstract class MopImpl implements Mop {
         List<Individual> parentsPopulation = initialPopulation;
         List<Individual> combinedPopulation = new ArrayList<>();
 
-        List<List<Individual>> frontsPopulation = generateDominanceDepthLayersByKung(initialPopulation);
+        List<List<Individual>> frontsPopulation = null;//generateDominanceDepthLayersByKung(initialPopulation);
 
         List<Individual> selectedPopulation = selection(parentsPopulation);
         List<Individual> mutatedPopulation = mutatePopulation(selectedPopulation);
@@ -70,9 +69,17 @@ public abstract class MopImpl implements Mop {
             // 13)
             crowdingSort(frontsPopulation.get(i));
             int remains = initialPopulationSize - parentsPopulation.size();
-
+            for( int j = 0 ; j < remains ; ++j ){
+                parentsPopulation.add(frontsPopulation.get(i).get(j));
+            }
             // 13)
             //crowdingSort()
+            selectedPopulation = selection(parentsPopulation);
+            mutatedPopulation = mutatePopulation(selectedPopulation);
+
+            childrenPopulation = new ArrayList<>();
+            childrenPopulation.addAll(selectedPopulation);
+            childrenPopulation.addAll(mutatedPopulation);
         }
 
         //final population
@@ -104,10 +111,12 @@ public abstract class MopImpl implements Mop {
     }
 
     @Override
-    public void generatePopulation() {
+    public List<Individual> generatePopulation() {
+        List<Individual> population = new ArrayList<>();
         for( int i = 0 ; i < initialPopulationSize ; ++i ){
-            initialPopulation.add(generateIndividual());
+            population.add(generateIndividual());
         }
+        return population;
     }
 
     public List<Individual> selection(final List<Individual> individuals) {

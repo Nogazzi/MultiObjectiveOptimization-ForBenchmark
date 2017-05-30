@@ -11,7 +11,7 @@ public interface Mop {
     public void evaluate(Individual individual);
     public Individual generateIndividual();
     public void doSimulation();
-    public void generatePopulation();
+    public List<Individual> generatePopulation();
     public void/*List<Individual>*/ crowdingSort(List<Individual> individuals);
     //public void identifyFronts(List<Individual> individuals);
     public void calculateCrowdDistance(List<Individual> individuals);
