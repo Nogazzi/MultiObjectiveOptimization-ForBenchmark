@@ -12,10 +12,10 @@ public class MopOneImpl extends MopImpl {
 
     @Override
     public void evaluate(Individual individual) {
-        double characteristic = individual.getCharacteristic(0);
-        individual.setCriteriaValues(0, characteristic*characteristic);
-        individual.setCriteriaValues(1, Math.pow(characteristic-2,2));
-        this.terminationCondition--;
+        double characteristic = individual.getCoordinate(0);
+        individual.setEvaluatedValues(0, characteristic*characteristic);
+        individual.setEvaluatedValues(1, Math.pow(characteristic-2,2));
+        //this.terminationCondition--;
     }
 
     @Override

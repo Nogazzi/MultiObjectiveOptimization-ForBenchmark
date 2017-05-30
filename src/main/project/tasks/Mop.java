@@ -12,7 +12,7 @@ public interface Mop {
     public Individual generateIndividual();
     public void doSimulation();
     public void generatePopulation();
-    public List<Individual> crowdingSort(List<Individual> individuals);
-    public void identifyFronts(List<Individual> individuals);
+    public void/*List<Individual>*/ crowdingSort(List<Individual> individuals);
+    //public void identifyFronts(List<Individual> individuals);
     public void calculateCrowdDistance(List<Individual> individuals);
 }

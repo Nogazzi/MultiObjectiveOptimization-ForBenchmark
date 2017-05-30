@@ -11,47 +11,48 @@ import java.util.TreeSet;
 public class Individual implements Comparable<Individual> {
 
     private final int size;
-    private final double[] characteristics;
-    private double[] criteriaValues;
+    private final double[] coordinates;
+    private double[] evaluatedValues;
     private int dominanceDepth = 0;
     private int dominanceRank = 1;
     private int dominanceCount = 0;
     private Set<Individual> dominators = new TreeSet<>();
     private Set<Individual> dominated = new TreeSet<>();
-    private int crowdDistance = 0;
+    private double crowdingSortValue = 0;
 
     public Individual(final int size) {
         this.size = size;
-        this.characteristics = new double[size];
-        this.criteriaValues = new double[size];
+        this.coordinates = new double[size];
+        this.evaluatedValues = new double[size];
         for (int i = 0; i < size; ++i) {
             double newDouble = new Random().nextDouble();
 
-            characteristics[i] = newDouble;
+            coordinates[i] = newDouble;
         }
     }
 
     public Individual(final double[] characteristics, final int size) {
         this.size = size;
-        this.characteristics = characteristics;
+        this.coordinates = characteristics;
     }
 
     public Individual(final int size, final double x1, final double x2) {
         this.size = size;
-        this.characteristics = new double[size];
-        this.characteristics[0] = x1;
-        this.characteristics[1] = x2;
+        this.coordinates = new double[size];
+        this.coordinates[0] = x1;
+        this.coordinates[1] = x2;
     }
 
     public Individual(final int size, final double[] characteristics) {
         this.size = size;
-        this.characteristics = characteristics;
+        this.coordinates = characteristics;
+        this.evaluatedValues = new double[2];
     }
 
     public Individual(final int size, final double[] characteristics, final int criteriasAmount){
         this.size = size;
-        this.characteristics = characteristics;
-        this.criteriaValues = new double[criteriasAmount];
+        this.coordinates = characteristics;
+        this.evaluatedValues = new double[criteriasAmount];
     }
 
     public void setDominanceDepth(int dominanceDepth) {
@@ -66,16 +67,16 @@ public class Individual implements Comparable<Individual> {
         this.dominanceCount = dominanceCount;
     }
 
-    public void setCrowdDistance(int distance){
-        this.crowdDistance = distance;
+    public void setCrowdingSortValue(double distance){
+        this.crowdingSortValue = distance;
     }
 
-    public void setCriteriaValues(int index, double value){
-        this.criteriaValues[index] = value;
+    public void setEvaluatedValues(int index, double value){
+        this.evaluatedValues[index] = value;
     }
 
-    public int getCrowdDistance(){
-        return this.crowdDistance;
+    public double getCrowdingSortValue(){
+        return this.crowdingSortValue;
     }
 
     public int getDominanceDepth() {
@@ -106,12 +107,20 @@ public class Individual implements Comparable<Individual> {
         return this.size;
     }
 
-    public double getCharacteristic(final int index) {
-        return this.characteristics[index];
+    public double getCoordinate(final int index) {
+        return this.coordinates[index];
     }
 
-    public double[] getCharacteristics(){
-        return this.characteristics;
+    public double[] getCoordinates(){
+        return this.coordinates;
+    }
+
+    public double[] getEvaluatedValues() {
+        return evaluatedValues;
+    }
+
+    public double getEvaluatedValue(int i) {
+        return evaluatedValues[i];
     }
 
     public boolean dominates(Individual o1) {
@@ -120,9 +129,9 @@ public class Individual implements Comparable<Individual> {
         }
         boolean dominates = false;
         for (int i = 0; i < o1.getSize(); ++i) {
-            if (this.getCharacteristic(i) > o1.getCharacteristic(i)) {
+            if (this.getCoordinate(i) > o1.getCoordinate(i)) {
                 return false;
-            } else if (this.getCharacteristic(i) < o1.getCharacteristic(i)) {
+            } else if (this.getCoordinate(i) < o1.getCoordinate(i)) {
                 dominates = true;
             }
         }
@@ -146,9 +155,9 @@ public class Individual implements Comparable<Individual> {
 
     @Override
     public int compareTo(Individual o) {
-        int dif = Double.compare(o.getCharacteristic(0), getCharacteristic(0));
+        int dif = Double.compare(o.getCoordinate(0), getCoordinate(0));
         if (dif == 0) {
-            return Double.compare(o.getCharacteristic(1), getCharacteristic(1));
+            return Double.compare(o.getCoordinate(1), getCoordinate(1));
         }
         return dif;
     }
@@ -157,7 +166,7 @@ public class Individual implements Comparable<Individual> {
     public String toString() {
         String desc = "[";
         for (int i = 0; i < size; ++i) {
-            desc += this.characteristics[i];
+            desc += this.coordinates[i];
             if (i != size - 1) {
                 desc += ";";
             }
@@ -173,7 +182,7 @@ public class Individual implements Comparable<Individual> {
             return false;
         }
         for (int i = 0; i < getSize(); ++i) {
-            if (getCharacteristic(i) != o1.getCharacteristic(i)) {
+            if (getCoordinate(i) != o1.getCoordinate(i)) {
                 return false;
             }
         }
@@ -183,7 +192,7 @@ public class Individual implements Comparable<Individual> {
     public String printIndividual() {
         String result = "";
         for (int i = 0; i < size; ++i) {
-            result += characteristics[i] + "\t";
+            result += coordinates[i] + "\t";
         }
         return result;
     }

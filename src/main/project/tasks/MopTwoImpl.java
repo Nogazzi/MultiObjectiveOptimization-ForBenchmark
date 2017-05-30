@@ -10,7 +10,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class MopTwoImpl extends MopImpl {
     @Override
     public void evaluate(Individual individual) {
-        double characteristics[] = individual.getCharacteristics();
+        double characteristics[] = individual.getCoordinates();
         double evalue1;
         double evalue2;
 
@@ -21,13 +21,13 @@ public class MopTwoImpl extends MopImpl {
         }
         evalue1 = 1 - Math.exp(-sum1);
 
-        for( int i = 1 ; i < characteristics.length ; ++i){
+        for( int i = 0 ; i < characteristics.length ; ++i){
             sum2 += Math.pow(characteristics[i] + 1/Math.sqrt(characteristics.length),2);
         }
         evalue2 = 1 - Math.exp(-sum2);
-        individual.setCriteriaValues(0, evalue1);
-        individual.setCriteriaValues(1, evalue2);
-        this.terminationCondition--;
+        individual.setEvaluatedValues(0, evalue1);
+        individual.setEvaluatedValues(1, evalue2);
+        //this.terminationCondition--;
     }
 
     @Override
@@ -36,7 +36,7 @@ public class MopTwoImpl extends MopImpl {
         for (int i = 0; i < characteristic.length; ++i) {
             characteristic[i] = ThreadLocalRandom.current().nextInt(-4, 4 + 1);
         }
-        Individual individual = new Individual(1, characteristic, 2);
+        Individual individual = new Individual(3, characteristic, 2);
 
         return individual;
     }
