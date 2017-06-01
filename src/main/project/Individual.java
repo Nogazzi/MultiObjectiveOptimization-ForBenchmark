@@ -23,7 +23,7 @@ public class Individual implements Comparable<Individual> {
     public Individual(final int size) {
         this.size = size;
         this.coordinates = new double[size];
-        this.evaluatedValues = new double[size];
+        this.evaluatedValues = new double[2];
         for (int i = 0; i < size; ++i) {
             double newDouble = new Random().nextDouble();
 
@@ -34,6 +34,7 @@ public class Individual implements Comparable<Individual> {
     public Individual(final double[] characteristics, final int size) {
         this.size = size;
         this.coordinates = characteristics;
+        this.evaluatedValues = new double[2];
     }
 
     public Individual(final int size, final double x1, final double x2) {
@@ -41,6 +42,7 @@ public class Individual implements Comparable<Individual> {
         this.coordinates = new double[size];
         this.coordinates[0] = x1;
         this.coordinates[1] = x2;
+        this.evaluatedValues = new double[2];
     }
 
     public Individual(final int size, final double[] characteristics) {
@@ -155,8 +157,8 @@ public class Individual implements Comparable<Individual> {
 
     @Override
     public int compareTo(Individual o) {
-        for( int i = 0 ; i < this.coordinates.length ; ++i ){
-            int dif = Double.compare(o.getCoordinate(i), getCoordinate(i));
+        for( int i = 0 ; i < this.getEvaluatedValues().length ; ++i ){
+            int dif = Double.compare(getEvaluatedValue(i),o.getEvaluatedValue(i));
             if (dif != 0) {
                 return dif;
             }

@@ -3,14 +3,13 @@ package main.project.tasks;
 import main.project.HeuristicComparator;
 import main.project.Individual;
 import main.project.KungComparator;
+import main.project.NaiveComparator;
 import main.project.comparators.CrowdingValueSort;
 import main.project.comparators.F1CrowdingSort;
 import main.project.comparators.F2CrowdingSort;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.io.*;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -18,9 +17,9 @@ import java.util.stream.Collectors;
  */
 public abstract class MopImpl implements Mop {
 
-    protected int terminationCondition = 6;
+    protected int terminationCondition = 10000;
 
-    private int initialPopulationSize = 30;
+    private final int initialPopulationSize = 30;
     private List<Individual> initialPopulation;
 
     private double sigma = 0.8d;
@@ -33,12 +32,14 @@ public abstract class MopImpl implements Mop {
         initialPopulation.stream().forEach(individual -> evaluate(individual));
 
         HeuristicComparator kung = new KungComparator();
+        List<List<Individual>> frontsPopulation = generateDominanceDepthLayersByKung(initialPopulation);
+        initialPopulation = new ArrayList<>();
+        frontsPopulation.stream().forEach(individuals -> initialPopulation.addAll(individuals));
 
         List<Individual> childrenPopulation = new ArrayList<>();
         List<Individual> parentsPopulation = initialPopulation;
         List<Individual> combinedPopulation = new ArrayList<>();
-
-        List<List<Individual>> frontsPopulation = null;//generateDominanceDepthLayersByKung(initialPopulation);
+        //List<List<Individual>> frontsPopulation = null;//generateDominanceDepthLayersByKung(initialPopulation);
 
         List<Individual> selectedPopulation = selection(parentsPopulation);
         List<Individual> mutatedPopulation = mutatePopulation(selectedPopulation);
@@ -80,12 +81,37 @@ public abstract class MopImpl implements Mop {
             childrenPopulation = new ArrayList<>();
             childrenPopulation.addAll(selectedPopulation);
             childrenPopulation.addAll(mutatedPopulation);
-        }
 
+            terminationCondition--;
+        }
+        System.out.println(parentsPopulation.size());
         //final population
+        saveToFile(parentsPopulation, "wynikiMOP1.txt");
     }
 
-    private List<Individual> mutatePopulation(final List<Individual> population){
+
+    public static void saveToFile(List<Individual> individuals, String filename){
+        PrintWriter bw;
+        FileWriter fw;
+        try {
+            fw = new FileWriter(filename);
+            bw = new PrintWriter(fw);
+            for (Individual individual: individuals) {
+                //System.out.println(line);
+                if( individual.getCoordinates().length == 3 ) {
+                    bw.println(individual.getCoordinate(0) + " \t " + individual.getCoordinate(1) + " \t " + individual.getCoordinate(2) + " \t " + individual.getEvaluatedValue(0) + " \t " + individual.getEvaluatedValue(1));
+                }else if( individual.getCoordinates().length == 1){
+                    bw.println(individual.getCoordinate(0) + " \t " + individual.getEvaluatedValue(0) + " \t " + individual.getEvaluatedValue(1));
+                }
+            }
+            bw.close();
+            fw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    protected List<Individual> mutatePopulation(final List<Individual> population){
         final List<Individual> mutatedPopulation = new ArrayList<>();
         for ( int i = 0 ; i < population.size() ; ++i ) {
             mutatedPopulation.add(mutateIndividual(population.get(i)));
@@ -94,7 +120,7 @@ public abstract class MopImpl implements Mop {
         return mutatedPopulation;
     }
 
-    private Individual mutateIndividual(final Individual individual/*, final double sigma*/){
+    protected Individual mutateIndividual(final Individual individual/*, final double sigma*/){
         Random generator = new Random();
         final Individual newIndividual;
         sigma = sigma * Math.exp(tau*generator.nextGaussian());
@@ -182,6 +208,36 @@ public abstract class MopImpl implements Mop {
         kungIdentifiedSet = kungIdentifiedSet.stream().distinct().collect(Collectors.toList());
         return kungIdentifiedSet;
     }
+
+    public static List<Individual> readCsv(String title) throws IOException {
+        List<Individual> individuals = new ArrayList<>();
+        List<Double> numbers = new ArrayList<>();
+        String readData;
+        String line;
+        BufferedReader br = null;
+        String spliter = ";";
+        try {
+            br = new BufferedReader(new FileReader(title));
+            while ((line = br.readLine()) != null) {
+                String[] x = line.split(spliter);
+                numbers.addAll(Arrays.stream(x).map(Double::new).collect(Collectors.toList()));
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            br.close();
+        }
+        for (Double numb : numbers) {
+            System.out.println(numb);
+        }
+        for (int i = 0; i < numbers.size(); i += 2) {
+            individuals.add(new Individual(2, numbers.get(i), numbers.get(i + 1)));
+        }
+        return individuals;
+    }
+
 
     @Override
     public void/*List<Individual>*/ crowdingSort(List<Individual> individuals) {
