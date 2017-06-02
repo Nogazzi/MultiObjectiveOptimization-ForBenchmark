@@ -26,7 +26,7 @@ public class MopOneImpl extends MopImpl {
 
     @Override
     public Individual generateIndividual() {
-        double[] characteristic = {new Random().nextDouble()*10000};
+        double[] characteristic = {new Random().nextDouble()*20000-10000};
         Individual individual = new Individual(1, characteristic, 2);
         evaluate(individual);
         return individual;

@@ -41,7 +41,7 @@ public class MopTwoImpl extends MopImpl {
     public Individual generateIndividual() {
         double[] characteristic = new double[3];
         for (int i = 0; i < characteristic.length; ++i) {
-            characteristic[i] = new Random().nextDouble()*4;
+            characteristic[i] = new Random().nextDouble()*8-4;
         }
         Individual individual = new Individual(3, characteristic, 2);
         evaluate(individual);

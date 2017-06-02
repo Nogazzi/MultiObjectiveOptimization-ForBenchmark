@@ -16,21 +16,23 @@ import java.util.stream.Collectors;
  */
 public abstract class MopImpl implements Mop {
     protected String filename;
-    protected int terminationCondition = 100000;
+    protected int terminationCondition = 1000;
 
-    private final int initialPopulationSize = 30;
+    private final int initialPopulationSize = 200;
     private List<Individual> initialPopulation;
 
     private double sigma = 0.22d;
-    private final double epsilon = 0.002d;
-    private double tau = 0.01d;
+    private final double epsilon = 0.2d;
+    private double tau = 0.4d;
 
     @Override
     public void doSimulation() {
         tau = 1/Math.sqrt(initialPopulationSize);
         initialPopulation = generatePopulation();
+
         initialPopulation.stream().forEach(individual -> evaluate(individual));
 
+        initialPopulation.stream().forEach(individual -> System.out.println(individual.getCoordinate(0)));
         /*List<List<Individual>> frontsPopulation = */
         generateDominanceDepthLayersByKung(initialPopulation);
         //initialPopulation = new ArrayList<>();

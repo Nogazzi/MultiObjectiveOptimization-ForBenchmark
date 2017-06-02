@@ -1,6 +1,7 @@
 package test;
 
 import main.project.Individual;
+import main.project.comparators.CrowdingValueSort;
 import main.project.comparators.F1CrowdingSort;
 import main.project.comparators.F2CrowdingSort;
 import main.project.tasks.Mop;
@@ -31,6 +32,19 @@ public class SortTest {
         List<Individual> l2 = new ArrayList<>(individuals);
         l1.sort(new F1CrowdingSort());
         l2.sort(new F2CrowdingSort());
-        System.out.println(passedIndividuals);
+    }
+
+    @Test
+    public void dsg(){
+        List<Individual> passedIndividuals = new ArrayList<>();
+        for( int i = 0 ; i < 20 ; ++i ){
+            Individual ind = new Individual(2);
+            ind.setCrowdingSortValue(i*2);
+            passedIndividuals.add(ind);
+        }
+        passedIndividuals.sort(new CrowdingValueSort());
+        for( int i = 0 ;i < passedIndividuals.size() ; ++i){
+            System.out.println(passedIndividuals.get(i).getCrowdingSortValue());
+        }
     }
 }
