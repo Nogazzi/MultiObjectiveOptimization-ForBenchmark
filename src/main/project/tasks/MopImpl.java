@@ -151,7 +151,7 @@ public abstract class MopImpl implements Mop {
     public List<Individual> selection(final List<Individual> passedIndividuals) {
 
         List<Individual> selectedIndividuals = new ArrayList<>();
-        List<Individual> individuals = setCrowdList(passedIndividuals);
+        List<Individual> individuals = setCrowdDistance(passedIndividuals);
         Collections.shuffle(individuals);
         for( int i = 0 ; i < individuals.size() ; i+=2){
             if(individuals.get(i).getDominanceDepth() < individuals.get(i+1).getDominanceDepth()){
@@ -169,7 +169,7 @@ public abstract class MopImpl implements Mop {
         return selectedIndividuals;
     }
 
-    public List<Individual> setCrowdList(List<Individual> passedIndividuals){
+    public List<Individual> setCrowdDistance(List<Individual> passedIndividuals){
         List<Individual> individuals = new ArrayList<>(passedIndividuals);
         individuals.sort(new F1CrowdingSort());
         for( int i = 0 ; i < individuals.size() ; ++i){
