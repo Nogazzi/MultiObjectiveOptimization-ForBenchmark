@@ -8,6 +8,12 @@ import java.util.concurrent.ThreadLocalRandom;
  * Created by Nogaz on 28.05.2017.
  */
 public class MopTwoImpl extends MopImpl {
+
+    public MopTwoImpl(){
+        super();
+        this.filename = "mopTwo.txt";
+    }
+
     @Override
     public void evaluate(Individual individual) {
         double characteristics[] = individual.getCoordinates();
@@ -37,7 +43,7 @@ public class MopTwoImpl extends MopImpl {
             characteristic[i] = ThreadLocalRandom.current().nextInt(-4, 4 + 1);
         }
         Individual individual = new Individual(3, characteristic, 2);
-
+        evaluate(individual);
         return individual;
     }
 }

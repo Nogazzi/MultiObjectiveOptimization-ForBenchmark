@@ -9,6 +9,11 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 public class MopOneImpl extends MopImpl {
 
+    public MopOneImpl(){
+        super();
+
+        this.filename = "mopOne.txt";
+    }
 
     @Override
     public void evaluate(Individual individual) {

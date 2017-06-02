@@ -11,8 +11,7 @@ public class CrowdingValueSort implements Comparator<Individual> {
     //sort decr
     @Override
     public int compare(Individual o1, Individual o2) {
-        double dif = o2.getCrowdingSortValue() - o2.getCrowdingSortValue();
-        return (int) (dif * 10);
+        return Double.compare(o2.getCrowdingSortValue(), o1.getCrowdingSortValue());
     }
 
 }
