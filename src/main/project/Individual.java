@@ -45,16 +45,22 @@ public class Individual implements Comparable<Individual> {
         this.evaluatedValues = new double[2];
     }
 
-    public Individual(final int size, final double[] characteristics) {
+    public Individual(final int size, final double[] coordinates) {
         this.size = size;
-        this.coordinates = characteristics;
+        this.coordinates = coordinates;
         this.evaluatedValues = new double[2];
     }
 
-    public Individual(final int size, final double[] characteristics, final int criteriasAmount){
+    public Individual(final int size, final double[] coordinates, final int criteriasAmount){
         this.size = size;
-        this.coordinates = characteristics;
+        this.coordinates = coordinates;
         this.evaluatedValues = new double[criteriasAmount];
+    }
+
+    public Individual(double ev1, double ev2){
+        this.size = 2;
+        this.evaluatedValues = new double[]{ev1,ev2};
+        this.coordinates = null;
     }
 
     public void setDominanceDepth(int dominanceDepth) {
@@ -131,9 +137,9 @@ public class Individual implements Comparable<Individual> {
         }
         boolean dominates = false;
         for (int i = 0; i < o1.getSize(); ++i) {
-            if (this.getCoordinate(i) > o1.getCoordinate(i)) {
+            if (this.getCoordinate(i) < o1.getCoordinate(i)) {
                 return false;
-            } else if (this.getCoordinate(i) < o1.getCoordinate(i)) {
+            } else if (this.getCoordinate(i) > o1.getCoordinate(i)) {
                 dominates = true;
             }
         }

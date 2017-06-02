@@ -2,6 +2,7 @@ package main.project.tasks;
 
 import main.project.Individual;
 
+import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -40,7 +41,7 @@ public class MopTwoImpl extends MopImpl {
     public Individual generateIndividual() {
         double[] characteristic = new double[3];
         for (int i = 0; i < characteristic.length; ++i) {
-            characteristic[i] = ThreadLocalRandom.current().nextInt(-4, 4 + 1);
+            characteristic[i] = new Random().nextDouble()*4;
         }
         Individual individual = new Individual(3, characteristic, 2);
         evaluate(individual);

@@ -7,7 +7,7 @@ import java.util.Comparator;
 /**
  * Created by Nogaz on 29.05.2017.
  */
-public class F1CrowdingSort implements Comparator<Individual>{
+public class F1CrowdingSort implements Comparator<Individual> {
     //sort decr
     @Override
     public int compare(Individual o1, Individual o2) {
